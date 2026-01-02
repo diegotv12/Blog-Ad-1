@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canjear Código - TVCRAFT MC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/icontvcraftmc.png">
+    <style>
+        .redeem-container { max-width: 600px; margin: 0 auto; }
+        .redeem-card { background-color: #0b0a15; border-radius: 12px; padding: 2rem; border: 1px solid #1a1829; text-align: center; }
+        .redeem-icon { font-size: 4rem; color: #fec600; margin-bottom: 1rem; }
+        .code-input-container { position: relative; margin: 2rem 0; }
+        .code-input { width: 100%; padding: 1rem 1.5rem; background-color: rgba(255, 255, 255, 0.05); border: 2px solid rgba(254, 198, 0, 0.3); border-radius: 8px; color: #ffffff; font-size: 1.25rem; text-align: center; letter-spacing: 2px; font-family: monospace; }
+        .code-input:focus { outline: none; border-color: #fec600; box-shadow: 0 0 10px rgba(254, 198, 0, 0.5); }
+        .recent-codes { margin-top: 3rem; }
+        .codes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .code-item { background-color: rgba(254, 198, 0, 0.05); padding: 1rem; border-radius: 8px; border: 1px solid rgba(254, 198, 0, 0.1); }
+        .code-item.redeemed { opacity: 0.6; }
+        .code-value { font-family: monospace; font-weight: 700; color: #fec600; margin-bottom: 0.5rem; }
+        .code-reward { font-size: 0.875rem; color: #b0b0c0; }
+        .code-status { font-size: 0.75rem; margin-top: 0.5rem; padding: 0.25rem 0.5rem; border-radius: 4px; display: inline-block; }
+        .status-active { background-color: rgba(0, 200, 83, 0.2); color: #00c853; }
+        .status-redeemed { background-color: rgba(244, 67, 54, 0.2); color: #f44336; }
+        .redeem-history { margin-top: 3rem; }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .history-table th, .history-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(254, 198, 0, 0.1); }
+        .history-table th { color: #fec600; font-weight: 600; }
+        .reward-coin { color: #fec600; }
+        .reward-item { color: #00c853; }
+    </style>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/img/icontvcraftmc.png" alt="TVCRAFT MC Logo">
+                <span>TVCRAFT MC</span>
+            </a>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+                <a href="tienda.html" class="nav-link"><i class="fas fa-store"></i> Tienda</a>
+                <a href="anuncios.html" class="nav-link"><i class="fas fa-ad"></i> Anuncios</a>
+                <a href="canjear.html" class="nav-link active"><i class="fas fa-gift"></i> Canjear Código</a>
+                <a href="perfil.html" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
+                <div class="nav-auth" id="navAuth">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Canjear Código -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Canjear Código</h2>
+            <p style="text-align: center; color: #b0b0c0; margin-bottom: 3rem;">
+                Ingresa códigos promocionales para obtener recompensas exclusivas
+            </p>
+            
+            <div class="redeem-container">
+                <!-- Formulario de Canje -->
+                <div class="redeem-card">
+                    <div class="redeem-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    
+                    <h3>¿Tienes un código?</h3>
+                    <p>Ingresa tu código promocional para canjearlo</p>
+                    
+                    <div class="code-input-container">
+                        <input type="text" 
+                               id="codeInput" 
+                               class="code-input" 
+                               placeholder="EJEMPLO-CODE-1234"
+                               maxlength="20"
+                               style="text-transform: uppercase;">
+                    </div>
+                    
+                    <button class="btn btn-primary btn-large" id="redeemBtn" style="width: 100%;">
+                        <i class="fas fa-check-circle"></i> Canjear Código
+                    </button>
+                    
+                    <div id="redeemResult" style="margin-top: 1.5rem; display: none;">
+                        <!-- Resultado se mostrará aquí -->
+                    </div>
+                </div>
+                
+                <!-- Códigos Recientes -->
+                <div class="recent-codes">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-history"></i> Códigos Recientes</h3>
+                    <div class="codes-grid" id="recentCodes">
+                        <!-- Se llena dinámicamente -->
+                        <div class="code-item">
+                            <div class="code-value">WELCOME-2024</div>
+                            <div class="code-reward">100 TCoins</div>
+                            <div class="code-status status-active">Activo</div>
+                        </div>
+                        <div class="code-item redeemed">
+                            <div class="code-value">SUMMER-FUN</div>
+                            <div class="code-reward">Kit Poseidon</div>
+                            <div class="code-status status-redeemed">Canjeado</div>
+                        </div>
+                        <div class="code-item">
+                            <div class="code-value">NEWPLAYER50</div>
+                            <div class="code-reward">50 TCoins</div>
+                            <div class="code-status status-active">Activo</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Historial de Canjes -->
+                <div class="redeem-history" id="redeemHistorySection" style="display: none;">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-receipt"></i> Tu Historial de Canjes</h3>
+                    <div class="table-responsive">
+                        <table class="history-table" id="redeemHistory">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Recompensa</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Se llena dinámicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Información -->
+                <div style="margin-top: 3rem; padding: 1.5rem; background-color: rgba(253, 140, 0, 0.1); border-radius: 8px; border: 1px solid rgba(253, 140, 0, 0.3);">
+                    <h4 style="color: #fec600; margin-bottom: 0.5rem;"><i class="fas fa-info-circle"></i> ¿Dónde conseguir códigos?</h4>
+                    <p style="color: #b0b0c0; margin-bottom: 1rem;">
+                        Los códigos promocionales son publicados en nuestras redes sociales, eventos especiales y sorteos. 
+                        ¡Síguenos para no perderte ninguno!
+                    </p>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="#" class="btn btn-outline" style="flex: 1;">
+                            <i class="fab fa-discord"></i> Discord
+                        </a>
+                        <a href="#" class="btn btn-outline" style="flex: 1;">
+                            <i class="fab fa-twitter"></i> Twitter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/img/icontvcraftmc.png" alt="Logo">
+                    <h3>TVCRAFT MC</h3>
+                    <p>Servidor de Minecraft Bedrock<br>Modalidad Supervivencia</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <a href="tienda.html">Tienda</a>
+                    <a href="anuncios.html">Anuncios</a>
+                    <a href="canjear.html">Canjear Código</a>
+                    <a href="perfil.html">Perfil</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TVCRAFT MC. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/canjear.js"></script>
+</body>
+</html>

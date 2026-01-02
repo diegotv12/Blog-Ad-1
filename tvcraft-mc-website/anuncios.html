@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anuncios - TVCRAFT MC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/icontvcraftmc.png">
+    <style>
+        .ads-container { max-width: 600px; margin: 0 auto; }
+        .ads-card { background-color: #0b0a15; border-radius: 12px; padding: 2rem; border: 1px solid #1a1829; text-align: center; }
+        .ads-icon { font-size: 4rem; color: #fec600; margin-bottom: 1rem; }
+        .timer { font-size: 3rem; font-weight: 700; color: #fec600; margin: 2rem 0; font-family: monospace; }
+        .timer-complete { color: #00c853; }
+        .progress-bar { width: 100%; height: 10px; background-color: rgba(254, 198, 0, 0.1); border-radius: 5px; margin: 2rem 0; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, #fec600, #fd8c00); width: 0%; transition: width 1s linear; }
+        .cooldown-info { margin-top: 2rem; padding: 1rem; background-color: rgba(253, 140, 0, 0.1); border-radius: 8px; border: 1px solid rgba(253, 140, 0, 0.3); }
+        .reward-amount { font-size: 1.5rem; font-weight: 700; color: #fec600; margin: 1rem 0; }
+        .ads-rules { margin-top: 3rem; text-align: left; }
+        .rule { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1rem; }
+        .rule i { color: #fec600; margin-top: 0.25rem; }
+        .ads-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 2rem; }
+        .stat-item { background-color: rgba(254, 198, 0, 0.05); padding: 1rem; border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: #fec600; }
+        .stat-label { font-size: 0.875rem; color: #b0b0c0; }
+    </style>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/img/icontvcraftmc.png" alt="TVCRAFT MC Logo">
+                <span>TVCRAFT MC</span>
+            </a>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+                <a href="tienda.html" class="nav-link"><i class="fas fa-store"></i> Tienda</a>
+                <a href="anuncios.html" class="nav-link active"><i class="fas fa-ad"></i> Anuncios</a>
+                <a href="canjear.html" class="nav-link"><i class="fas fa-gift"></i> Canjear Código</a>
+                <a href="perfil.html" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
+                <div class="nav-auth" id="navAuth">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Anuncios -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Gana TCoins Gratis</h2>
+            <p style="text-align: center; color: #b0b0c0; margin-bottom: 3rem;">
+                Mira anuncios y gana TCoins para usar en la tienda
+            </p>
+            
+            <div class="ads-container">
+                <!-- Card Principal -->
+                <div class="ads-card" id="adsCard">
+                    <div class="ads-icon">
+                        <i class="fas fa-tv"></i>
+                    </div>
+                    
+                    <h3>Mira un Anuncio</h3>
+                    <p>Mira el anuncio completo para recibir TCoins gratis</p>
+                    
+                    <div class="timer" id="timer">30</div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    
+                    <div class="reward-amount">
+                        <i class="fas fa-coins"></i> +50 TCoins
+                    </div>
+                    
+                    <button class="btn btn-primary btn-large" id="startAdBtn" style="width: 100%;">
+                        <i class="fas fa-play"></i> Iniciar Anuncio
+                    </button>
+                    
+                    <div class="cooldown-info" id="cooldownInfo" style="display: none;">
+                        <i class="fas fa-clock"></i>
+                        <span id="cooldownText">Podrás ver otro anuncio en: 59:59</span>
+                    </div>
+                </div>
+                
+                <!-- Estadísticas -->
+                <div class="ads-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalAds">0</div>
+                        <div class="stat-label">Anuncios Vistos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalCoins">0</div>
+                        <div class="stat-label">TCoins Ganados</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="todayAds">0</div>
+                        <div class="stat-label">Hoy</div>
+                    </div>
+                </div>
+                
+                <!-- Reglas -->
+                <div class="ads-rules">
+                    <h3 style="margin-bottom: 1rem;"><i class="fas fa-info-circle"></i> Reglas y Condiciones</h3>
+                    
+                    <div class="rule">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>1 anuncio por hora</strong>
+                            <p style="color: #b0b0c0; margin-top: 0.25rem;">Puedes ver un anuncio cada 60 minutos</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rule">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Mira completo</strong>
+                            <p style="color: #b0b0c0; margin-top: 0.25rem;">Debes ver el anuncio completo para recibir la recompensa</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rule">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Sin trampas</strong>
+                            <p style="color: #b0b0c0; margin-top: 0.25rem;">Cualquier intento de trampa resultará en baneo permanente</p>
+                        </div>
+                    </div>
+                    
+                    <div class="rule">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <strong>Recompensa instantánea</strong>
+                            <p style="color: #b0b0c0; margin-top: 0.25rem;">Los TCoins se agregan automáticamente a tu cuenta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/img/icontvcraftmc.png" alt="Logo">
+                    <h3>TVCRAFT MC</h3>
+                    <p>Servidor de Minecraft Bedrock<br>Modalidad Supervivencia</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <a href="tienda.html">Tienda</a>
+                    <a href="anuncios.html">Anuncios</a>
+                    <a href="canjear.html">Canjear Código</a>
+                    <a href="perfil.html">Perfil</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TVCRAFT MC. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/anuncios.js"></script>
+</body>
+</html>

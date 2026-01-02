@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TVCRAFT MC - Supervivencia Bedrock</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/icontvcraftmc.png">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/img/icontvcraftmc.png" alt="TVCRAFT MC Logo">
+                <span>TVCRAFT MC</span>
+            </a>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link active"><i class="fas fa-home"></i> Inicio</a>
+                <a href="tienda.html" class="nav-link"><i class="fas fa-store"></i> Tienda</a>
+                <a href="anuncios.html" class="nav-link"><i class="fas fa-ad"></i> Anuncios</a>
+                <a href="canjear.html" class="nav-link"><i class="fas fa-gift"></i> Canjear Código</a>
+                <a href="perfil.html" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
+                <div class="nav-auth" id="navAuth">
+                    <!-- Se llena dinámicamente con JS -->
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Banner Principal -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">TVCRAFT MC</h1>
+            <p class="hero-subtitle">Supervivencia Bedrock Edition</p>
+            <div class="hero-message">
+                <i class="fas fa-clock"></i>
+                <span>Tu pedido se procesa en 24 horas</span>
+            </div>
+            <div class="hero-buttons">
+                <a href="tienda.html" class="btn btn-primary">Ir a la Tienda</a>
+                <a href="register.html" class="btn btn-secondary">Registrarse</a>
+            </div>
+        </div>
+        <div class="stars" id="stars"></div>
+    </section>
+
+    <!-- Top Compradores -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Top Compradores</h2>
+            <div class="top-buyers" id="topBuyers">
+                <!-- Se llena dinámicamente -->
+                <div class="loader">
+                    <div class="loader-spinner"></div>
+                    <p>Cargando top compradores...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Sección -->
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <h2>¿Listo para mejorar tu experiencia?</h2>
+                <p>Obtén rangos, kits, llaves y más con TCoins</p>
+                <div class="cta-buttons">
+                    <a href="tienda.html" class="btn btn-primary btn-large">
+                        <i class="fas fa-shopping-cart"></i> Ver Tienda Completa
+                    </a>
+                    <a href="anuncios.html" class="btn btn-secondary btn-large">
+                        <i class="fas fa-coins"></i> Ganar TCoins Gratis
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/img/icontvcraftmc.png" alt="Logo">
+                    <h3>TVCRAFT MC</h3>
+                    <p>Servidor de Minecraft Bedrock<br>Modalidad Supervivencia</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <a href="tienda.html">Tienda</a>
+                    <a href="anuncios.html">Anuncios</a>
+                    <a href="canjear.html">Canjear Código</a>
+                    <a href="perfil.html">Perfil</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TVCRAFT MC. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skinview3d@3.2.0/bundles/skinview3d.min.js"></script>
+    <script type="module" src="assets/js/main.js"></script>
+</body>
+</html>

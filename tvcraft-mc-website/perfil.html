@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - TVCRAFT MC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets/img/icontvcraftmc.png">
+    <style>
+        .profile-container { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; }
+        @media (max-width: 768px) { .profile-container { grid-template-columns: 1fr; } }
+        .profile-sidebar { background-color: #0b0a15; border-radius: 12px; padding: 2rem; border: 1px solid #1a1829; }
+        .profile-main { background-color: #0b0a15; border-radius: 12px; padding: 2rem; border: 1px solid #1a1829; }
+        .profile-header { text-align: center; margin-bottom: 2rem; }
+        .profile-avatar { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #fec600; margin: 0 auto 1rem; overflow: hidden; }
+        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .profile-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .profile-email { color: #b0b0c0; font-size: 0.875rem; margin-bottom: 1rem; }
+        .profile-status { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; }
+        .status-online { background-color: rgba(0, 200, 83, 0.2); color: #00c853; }
+        .status-offline { background-color: rgba(244, 67, 54, 0.2); color: #f44336; }
+        .tcoins-balance { background: linear-gradient(135deg, #fec600, #fd8c00); padding: 1.5rem; border-radius: 8px; text-align: center; margin: 1.5rem 0; }
+        .balance-label { color: rgba(6, 4, 15, 0.8); font-weight: 600; margin-bottom: 0.5rem; }
+        .balance-amount { font-size: 2rem; font-weight: 800; color: #06040f; }
+        .profile-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .stat { text-align: center; padding: 1rem; background-color: rgba(254, 198, 0, 0.05); border-radius: 8px; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; color: #fec600; }
+        .stat-label { font-size: 0.875rem; color: #b0b0c0; }
+        .profile-actions { display: flex; flex-direction: column; gap: 0.5rem; }
+        .section-tabs { display: flex; border-bottom: 1px solid rgba(254, 198, 0, 0.1); margin-bottom: 2rem; }
+        .tab { padding: 1rem 1.5rem; background: none; border: none; color: #b0b0c0; font-weight: 500; cursor: pointer; position: relative; }
+        .tab.active { color: #fec600; }
+        .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background-color: #fec600; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .orders-table { width: 100%; border-collapse: collapse; }
+        .orders-table th, .orders-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(254, 198, 0, 0.1); }
+        .orders-table th { color: #fec600; font-weight: 600; }
+        .status-pendiente { color: #ff9800; }
+        .status-completado { color: #00c853; }
+        .edit-form .form-group { margin-bottom: 1.5rem; }
+        .edit-form label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
+        .edit-form input { width: 100%; padding: 0.75rem; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(254, 198, 0, 0.2); border-radius: 8px; color: #ffffff; }
+        .skin-preview-container { text-align: center; margin: 1rem 0; }
+        .skin-preview-box { width: 100px; height: 100px; margin: 0 auto; border: 2px solid #fec600; border-radius: 8px; overflow: hidden; background-color: rgba(0, 0, 0, 0.3); }
+        .skin-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <img src="assets/img/icontvcraftmc.png" alt="TVCRAFT MC Logo">
+                <span>TVCRAFT MC</span>
+            </a>
+            
+            <div class="nav-menu" id="navMenu">
+                <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+                <a href="tienda.html" class="nav-link"><i class="fas fa-store"></i> Tienda</a>
+                <a href="anuncios.html" class="nav-link"><i class="fas fa-ad"></i> Anuncios</a>
+                <a href="canjear.html" class="nav-link"><i class="fas fa-gift"></i> Canjear Código</a>
+                <a href="perfil.html" class="nav-link active"><i class="fas fa-user"></i> Perfil</a>
+                <div class="nav-auth" id="navAuth">
+                    <!-- Se llena dinámicamente -->
+                </div>
+            </div>
+            
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Perfil -->
+    <section class="section">
+        <div class="container">
+            <div id="profileContent">
+                <!-- Se llena dinámicamente si el usuario está autenticado -->
+                <div class="profile-container">
+                    <!-- Sidebar -->
+                    <div class="profile-sidebar">
+                        <div class="profile-header">
+                            <div class="profile-avatar" id="profileAvatar">
+                                <!-- Avatar se llena con JS -->
+                            </div>
+                            <div class="profile-name" id="profileName">Cargando...</div>
+                            <div class="profile-email" id="profileEmail">cargando...</div>
+                            <div class="profile-status status-online" id="profileStatus">
+                                <i class="fas fa-circle"></i> Conectado
+                            </div>
+                        </div>
+                        
+                        <div class="tcoins-balance">
+                            <div class="balance-label">TU SALDO</div>
+                            <div class="balance-amount" id="tcoinsBalance">
+                                <i class="fas fa-coins"></i> 0
+                            </div>
+                        </div>
+                        
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <div class="stat-value" id="totalOrders">0</div>
+                                <div class="stat-label">Compras</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value" id="totalAds">0</div>
+                                <div class="stat-label">Anuncios</div>
+                            </div>
+                        </div>
+                        
+                        <div class="profile-actions">
+                            <button class="btn btn-primary" id="editProfileBtn">
+                                <i class="fas fa-edit"></i> Editar Perfil
+                            </button>
+                            <a href="tienda.html" class="btn btn-outline">
+                                <i class="fas fa-shopping-cart"></i> Ir a la Tienda
+                            </a>
+                            <a href="anuncios.html" class="btn btn-outline">
+                                <i class="fas fa-ad"></i> Ver Anuncios
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Contenido Principal -->
+                    <div class="profile-main">
+                        <div class="section-tabs">
+                            <button class="tab active" data-tab="orders">
+                                <i class="fas fa-shopping-bag"></i> Mis Compras
+                            </button>
+                            <button class="tab" data-tab="history">
+                                <i class="fas fa-history"></i> Historial
+                            </button>
+                            <button class="tab" data-tab="settings">
+                                <i class="fas fa-cog"></i> Configuración
+                            </button>
+                        </div>
+                        
+                        <!-- Tab: Mis Compras -->
+                        <div class="tab-content active" id="ordersTab">
+                            <h3 style="margin-bottom: 1rem;">Mis Compras Recientes</h3>
+                            <div class="table-responsive">
+                                <table class="orders-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Método</th>
+                                            <th>Precio</th>
+                                            <th>Fecha</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersTable">
+                                        <!-- Se llena dinámicamente -->
+                                        <tr>
+                                            <td colspan="5" style="text-align: center; padding: 2rem; color: #b0b0c0;">
+                                                <i class="fas fa-shopping-cart"></i><br>
+                                                No tienes compras todavía
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <!-- Tab: Historial -->
+                        <div class="tab-content" id="historyTab">
+                            <h3 style="margin-bottom: 1rem;">Historial de Actividad</h3>
+                            <div id="activityHistory">
+                                <!-- Se llena dinámicamente -->
+                                <div style="text-align: center; padding: 2rem; color: #b0b0c0;">
+                                    <i class="fas fa-history"></i><br>
+                                    No hay actividad reciente
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tab: Configuración -->
+                        <div class="tab-content" id="settingsTab">
+                            <h3 style="margin-bottom: 1rem;">Editar Perfil</h3>
+                            <form class="edit-form" id="editProfileForm" style="max-width: 500px;">
+                                <div class="form-group">
+                                    <label for="editNick"><i class="fas fa-user"></i> Nombre de Usuario (Nick)</label>
+                                    <input type="text" id="editNick" name="nick" placeholder="Tu nombre en el juego">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="editSkinUrl"><i class="fas fa-user-astronaut"></i> URL de tu Skin</label>
+                                    <input type="text" id="editSkinUrl" name="skin_url" 
+                                           placeholder="https://ejemplo.com/mi-skin.png">
+                                    <small style="color: #b0b0c0; display: block; margin-top: 0.5rem;">
+                                        Puedes subir tu skin a <a href="https://imgbb.com/" target="_blank" style="color: #fec600;">imgBB</a> o usar una predeterminada:
+                                    </small>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                                        <button type="button" class="default-skin-btn" data-skin-url="https://mc-heads.net/head/Steve" style="padding: 0.25rem 0.5rem; background: rgba(254,198,0,0.1); border: 1px solid rgba(254,198,0,0.3); border-radius: 4px; color: #b0b0c0; font-size: 0.75rem;">Steve</button>
+                                        <button type="button" class="default-skin-btn" data-skin-url="https://mc-heads.net/head/Alex" style="padding: 0.25rem 0.5rem; background: rgba(254,198,0,0.1); border: 1px solid rgba(254,198,0,0.3); border-radius: 4px; color: #b0b0c0; font-size: 0.75rem;">Alex</button>
+                                        <button type="button" class="default-skin-btn" data-skin-url="https://mc-heads.net/head/Villager" style="padding: 0.25rem 0.5rem; background: rgba(254,198,0,0.1); border: 1px solid rgba(254,198,0,0.3); border-radius: 4px; color: #b0b0c0; font-size: 0.75rem;">Vendedor</button>
+                                        <button type="button" class="default-skin-btn" data-skin-url="https://mc-heads.net/head/Chicken" style="padding: 0.25rem 0.5rem; background: rgba(254,198,0,0.1); border: 1px solid rgba(254,198,0,0.3); border-radius: 4px; color: #b0b0c0; font-size: 0.75rem;">Pato</button>
+                                        <button type="button" class="default-skin-btn" data-skin-url="https://mc-heads.net/head/Computer" style="padding: 0.25rem 0.5rem; background: rgba(254,198,0,0.1); border: 1px solid rgba(254,198,0,0.3); border-radius: 4px; color: #b0b0c0; font-size: 0.75rem;">PC</button>
+                                    </div>
+                                </div>
+                                
+                                <div class="skin-preview-container">
+                                    <div class="skin-preview-box" id="skinPreviewBox">
+                                        <div class="skin-placeholder" style="display: flex; align-items: center; justify-content: center; height: 100%; color: #b0b0c0;">
+                                            <i class="fas fa-user-circle"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Guardar Cambios
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Mensaje si no está autenticado -->
+            <div id="notLoggedIn" style="display: none; text-align: center; padding: 4rem 2rem;">
+                <i class="fas fa-user-lock" style="font-size: 4rem; color: #fec600; margin-bottom: 1rem;"></i>
+                <h3 style="margin-bottom: 1rem;">Acceso Restringido</h3>
+                <p style="color: #b0b0c0; margin-bottom: 2rem;">
+                    Debes iniciar sesión para ver tu perfil
+                </p>
+                <div style="display: flex; gap: 1rem; justify-content: center;">
+                    <a href="login.html" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </a>
+                    <a href="register.html" class="btn btn-outline">
+                        <i class="fas fa-user-plus"></i> Registrarse
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="assets/img/icontvcraftmc.png" alt="Logo">
+                    <h3>TVCRAFT MC</h3>
+                    <p>Servidor de Minecraft Bedrock<br>Modalidad Supervivencia</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Enlaces</h4>
+                    <a href="tienda.html">Tienda</a>
+                    <a href="anuncios.html">Anuncios</a>
+                    <a href="canjear.html">Canjear Código</a>
+                    <a href="perfil.html">Perfil</a>
+                </div>
+                <div class="footer-social">
+                    <h4>Síguenos</h4>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 TVCRAFT MC. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/perfil.js"></script>
+</body>
+</html>

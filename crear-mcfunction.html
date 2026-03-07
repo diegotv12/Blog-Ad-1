@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear McFunctions - Minecraft Dev Blog</title>
+    <style>
+        /* Mismo CSS que los anteriores */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --dark-bg: #1a2634;
+            --card-bg: #2a3747;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --border-color: #40546b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1a24 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 40px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            background: rgba(26, 38, 52, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-menu {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .nav-item {
+            padding: 15px 0;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            transform: scaleX(1);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .content-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin: 30px 0 20px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--text-primary);
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #1e2a36;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .code-block pre {
+            color: #e0e0e0;
+        }
+
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .step-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .footer {
+            background: var(--primary-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Crear McFunctions</h1>
+            <p>Automatiza tu servidor con funciones personalizadas</p>
+        </div>
+    </header>
+
+    <div class="nav-container">
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">Inicio</a>
+            <a href="codigo-js.html" class="nav-item">Código JS</a>
+            <a href="server-guia.html" class="nav-item">Servidores</a>
+            <a href="comandos-guia.html" class="nav-item">Comandos</a>
+            <a href="crear-mcfunction.html" class="nav-item active">McFunctions</a>
+        </nav>
+    </div>
+
+    <main class="main-container">
+        <div class="content-section">
+            <h1>Guía Completa de McFunctions</h1>
+            
+            <div class="info-box">
+                <h4>📌 ¿Qué son las McFunctions?</h4>
+                <p>Las funciones (.mcfunction) son archivos de texto que contienen una lista de comandos que se ejecutan secuencialmente. Son la base para crear sistemas complejos en Minecraft.</p>
+            </div>
+
+            <h2>Estructura de Archivos</h2>
+            
+            <div class="code-block">
+                <pre>
+# Estructura de un datapack
+datapack_name/
+├── pack.mcmeta
+└── data/
+    └── namespace/
+        ├── functions/
+        │   ├── example.mcfunction
+        │   └── subfolder/
+        │       └── another.mcfunction
+        └── tags/
+            └── functions/
+                └── tick.json</pre>
+            </div>
+
+            <div class="step-box">
+                <h3>pack.mcmeta</h3>
+                <div class="code-block">
+                    <pre>
+{
+    "pack": {
+        "pack_format": 15,
+        "description": "Mi datapack de funciones"
+    }
+}</pre>
+                </div>
+            </div>
+
+            <h2>Funciones Básicas</h2>
+            
+            <div class="code-block">
+                <pre>
+# welcome.mcfunction
+# Función de bienvenida
+
+say ¡Bienvenido al servidor!
+give @s minecraft:compass 1
+give @s minecraft:bread 16
+effect @s minecraft:speed 30 0
+title @s title {"text":"¡Bienvenido!","color":"gold"}</pre>
+            </div>
+
+            <h2>Sistema de Scoreboards</h2>
+            
+            <div class="code-block">
+                <pre>
+# setup_scoreboards.mcfunction
+# Crear scoreboards para estadísticas
+
+scoreboard objectives add deaths deathCount "Muertes"
+scoreboard objectives add kills playerKillCount "Asesinatos"
+scoreboard objectives add playtime minecraft.custom:minecraft.play_time "Tiempo Jugado"
+scoreboard objectives add money dummy "Dinero"
+scoreboard objectives add level dummy "Nivel"
+
+# Mostrar en sidebar
+scoreboard objectives setdisplay sidebar kills</pre>
+            </div>
+
+            <h2>Sistema de Niveles</h2>
+            
+            <div class="code-block">
+                <pre>
+# level_system.mcfunction
+# Sistema de niveles basado en kills
+
+# Obtener kills actuales
+execute store result score @s kills run scoreboard players get @s kills
+
+# Calcular nivel (cada 10 kills = 1 nivel)
+scoreboard players operation @s level = @s kills
+scoreboard players operation @s level /= @s const_10
+
+# Dar recompensas por nivel
+execute if score @s level matches 1 run give @s minecraft:iron_ingot 5
+execute if score @s level matches 5 run give @s minecraft:diamond 1
+execute if score @s level matches 10 run give @s minecraft:netherite_ingot 1
+
+# Mensaje de subida de nivel
+execute if score @s level matches 1.. run tellraw @s [{"text":"¡Has subido al nivel ","color":"green"},{"score":{"name":"@s","objective":"level"}}]</pre>
+            </div>
+
+            <h2>Sistema de Economía</h2>
+            
+            <div class="code-block">
+                <pre>
+# economy.mcfunction
+# Sistema de dinero
+
+# Ver dinero
+tellraw @s [{"text":"Tu dinero: $","color":"gold"},{"score":{"name":"@s","objective":"money"}}]
+
+# Añadir dinero
+scoreboard players add @s money 100
+tellraw @s {"text":"+$100","color":"green"}
+
+# Quitar dinero (con verificación)
+execute if score @s money matches 500.. run scoreboard players remove @s money 500
+execute if score @s money matches 500.. run give @s minecraft:diamond 1
+execute unless score @s money matches 500.. run tellraw @s {"text":"No tienes suficiente dinero","color":"red"}</pre>
+            </div>
+
+            <h2>Sistema de Tienda</h2>
+            
+            <div class="code-block">
+                <pre>
+# shop.mcfunction
+# Tienda básica
+
+# Mostrar opciones
+tellraw @s ["",{"text":"=== TIENDA ===\n","color":"gold","bold":true}]
+tellraw @s ["",{"text":"1. Espada de diamante - $500\n","color":"white"},{"text":"[COMPRAR]","color":"green","clickEvent":{"action":"run_command","value":"/function shop:buy_sword"}}]
+tellraw @s ["",{"text":"2. Pico de diamante - $400\n","color":"white"},{"text":"[COMPRAR]","color":"green","clickEvent":{"action":"run_command","value":"/function shop:buy_pickaxe"}}]
+tellraw @s ["",{"text":"3. Armadura completa - $1000\n","color":"white"},{"text":"[COMPRAR]","color":"green","clickEvent":{"action":"run_command","value":"/function shop:buy_armor"}}]
+
+# buy_sword.mcfunction
+execute if score @s money matches 500.. run scoreboard players remove @s money 500
+execute if score @s money matches 500.. run give @s minecraft:diamond_sword 1
+execute unless score @s money matches 500.. run tellraw @s {"text":"No tienes suficiente dinero","color":"red"}
+
+# buy_pickaxe.mcfunction
+execute if score @s money matches 400.. run scoreboard players remove @s money 400
+execute if score @s money matches 400.. run give @s minecraft:diamond_pickaxe 1
+execute unless score @s money matches 400.. run tellraw @s {"text":"No tienes suficiente dinero","color":"red"}
+
+# buy_armor.mcfunction
+execute if score @s money matches 1000.. run scoreboard players remove @s money 1000
+execute if score @s money matches 1000.. run give @s minecraft:diamond_helmet 1
+execute if score @s money matches 1000.. run give @s minecraft:diamond_chestplate 1
+execute if score @s money matches 1000.. run give @s minecraft:diamond_leggings 1
+execute if score @s money matches 1000.. run give @s minecraft:diamond_boots 1
+execute unless score @s money matches 1000.. run tellraw @s {"text":"No tienes suficiente dinero","color":"red"}</pre>
+            </div>
+
+            <h2>Eventos Programados (Tick)</h2>
+            
+            <div class="code-block">
+                <pre>
+# tick.json (tags/functions/tick.json)
+{
+    "values": [
+        "namespace:check_players",
+        "namespace:auto_save",
+        "namespace:particle_effects"
+    ]
+}
+
+# check_players.mcfunction
+# Ejecuta cada tick (20 veces por segundo)
+
+# Contar jugadores
+execute if entity @a[limit=1] run say Hay jugadores en el servidor
+execute unless entity @a[limit=1] run say Servidor vacío
+
+# Dar efectos en área
+effect give @a[distance=..10] minecraft:regeneration 1 0
+effect give @a[distance=..50] minecraft:speed 1 0
+
+# check_afk.mcfunction
+# Detectar jugadores AFK
+
+# Marcar tiempo de última actividad
+scoreboard players add @a afk_time 1
+
+# Resetear tiempo cuando se mueven
+execute as @a at @s if entity @s[x=~,y=~,z=~,dx=0,dy=0,dz=0] run scoreboard players set @s afk_time 0
+
+# Kickear después de 5 minutos (6000 ticks)
+execute as @a if score @s afk_time matches 6000.. run kick @s Has estado AFK demasiado tiempo</pre>
+            </div>
+
+            <h2>Sistema de Misiones (Quests)</h2>
+            
+            <div class="code-block">
+                <pre>
+# quest_system.mcfunction
+# Sistema de misiones
+
+# Iniciar misión
+scoreboard players set @s quest_active 1
+scoreboard players set @s quest_progress 0
+tellraw @s {"text":"¡Misión iniciada: Mata 10 zombies!","color":"green"}
+
+# quest_progress.mcfunction
+# Ejecutar cuando matan un zombie
+
+execute if score @s quest_active matches 1 run scoreboard players add @s quest_progress 1
+execute if score @s quest_progress matches 10.. run function quest:complete
+
+# quest_complete.mcfunction
+# Completar misión
+
+tellraw @s {"text":"¡Misión completada!","color":"gold","bold":true}
+give @s minecraft:diamond 5
+give @s minecraft:emerald 10
+scoreboard players set @s quest_active 0
+scoreboard players set @s quest_progress 0</pre>
+            </div>
+
+            <h2>Sistema de Protección</h2>
+            
+            <div class="code-block">
+                <pre>
+# protection.mcfunction
+# Sistema de protección de áreas
+
+# Definir área protegida
+execute positioned 100 64 100 run function protection:check_area
+
+# check_area.mcfunction
+# Verificar si puede construir
+
+execute positioned ~ ~ ~ run function protection:can_build
+
+# can_build.mcfunction
+# Permitir solo a ciertos jugadores
+
+execute if entity @p[tag=admin] run setblock ~ ~ ~ minecraft:stone
+execute unless entity @p[tag=admin] run tellraw @p {"text":"No puedes construir aquí","color":"red"}
+
+# protection_region.mcfunction
+# Proteger región específica
+
+# Detectar entrada/salida
+execute as @a at @s if entity @s[x=100,y=64,z=100,dx=50,dy=20,dz=50] run tag @s add in_region
+execute as @a at @s unless entity @s[x=100,y=64,z=100,dx=50,dy=20,dz=50] run tag @s remove in_region
+
+# Aplicar reglas dentro de la región
+execute as @a[tag=in_region] at @s run effect @s minecraft:resistance 1 0
+execute as @a[tag=in_region] at @s run effect @s minecraft:regeneration 1 0</pre>
+            </div>
+
+            <h2>Sistema de Crafting Personalizado</h2>
+            
+            <div class="code-block">
+                <pre>
+# custom_crafting.mcfunction
+# Sistema de crafting personalizado
+
+# Detectar cuando un jugador coloca items
+execute as @a at @s if block ~ ~-1 ~ minecraft:crafting_table run function crafting:check
+
+# check.mcfunction
+# Verificar receta
+
+# Receta: 9 diamantes → 1 netherite
+clear @s minecraft:diamond 9
+execute if items entity @s container.* minecraft:diamond 9 run give @s minecraft:netherite_ingot 1
+execute unless items entity @s container.* minecraft:diamond 9 run give @s minecraft:diamond 9</pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h4>💡 Mejores Prácticas</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Organización:</strong> Usa carpetas para diferentes sistemas</li>
+                    <li><strong>Optimización:</strong> Limita las funciones en tick a lo esencial</li>
+                    <li><strong>Debug:</strong> Usa <code>say</code> y <code>tellraw</code> para probar</li>
+                    <li><strong>Compatibilidad:</strong> Usa namespaces únicos para evitar conflictos</li>
+                    <li><strong>Documentación:</strong> Comenta tus funciones para mantenerlas claras</li>
+                </ul>
+            </div>
+
+            <div class="step-box">
+                <h3>Ejemplo Completo: Datapack de Bienvenida</h3>
+                <div class="code-block">
+                    <pre>
+# Estructura final del datapack
+welcome_datapack/
+├── pack.mcmeta
+└── data/
+    └── welcome/
+        ├── functions/
+        │   ├── init.mcfunction
+        │   ├── join.mcfunction
+        │   ├── give_items.mcfunction
+        │   └── spawn_protection.mcfunction
+        └── tags/
+            └── functions/
+                └── tick.json
+
+# init.mcfunction
+scoreboard objectives add first_join dummy
+say Datapack de bienvenida cargado
+
+# join.mcfunction
+execute unless score @s first_join matches 1 run function welcome:give_items
+scoreboard players set @s first_join 1
+
+# give_items.mcfunction
+give @s minecraft:wooden_sword 1
+give @s minecraft:cooked_beef 16
+give @s minecraft:torch 32
+title @s title {"text":"¡Bienvenido!","color":"gold"}
+playsound minecraft:entity.player.levelup master @s
+
+# tick.json
+{
+    "values": [
+        "welcome:spawn_protection"
+    ]
+}
+
+# spawn_protection.mcfunction
+execute as @a at @s positioned 0 64 0 run function welcome:protect
+
+# protect.mcfunction
+execute if entity @s[distance=..10] run effect @s minecraft:resistance 1 0
+execute if entity @s[distance=..10] run effect @s minecraft:regeneration 1 0
+execute if entity @s[distance=..10] run effect @s minecraft:saturation 1 0</pre>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Minecraft Dev Blog &copy; 2024 - Guías profesionales para desarrolladores</p>
+        </div>
+    </footer>
+</body>
+</html>

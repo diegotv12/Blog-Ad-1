@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Comandos - Minecraft Dev Blog</title>
+    <style>
+        /* Mismo CSS que las anteriores */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --dark-bg: #1a2634;
+            --card-bg: #2a3747;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --border-color: #40546b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1a24 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 40px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            background: rgba(26, 38, 52, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-menu {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .nav-item {
+            padding: 15px 0;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            transform: scaleX(1);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .content-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin: 30px 0 20px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--text-primary);
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #1e2a36;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .command-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .command-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .command-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .command-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .footer {
+            background: var(--primary-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Guía de Comandos Minecraft</h1>
+            <p>Domina todos los comandos y crea los tuyos propios</p>
+        </div>
+    </header>
+
+    <div class="nav-container">
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">Inicio</a>
+            <a href="codigo-js.html" class="nav-item">Código JS</a>
+            <a href="server-guia.html" class="nav-item">Servidores</a>
+            <a href="comandos-guia.html" class="nav-item active">Comandos</a>
+            <a href="crear-mcfunction.html" class="nav-item">McFunctions</a>
+        </nav>
+    </div>
+
+    <main class="main-container">
+        <div class="content-section">
+            <h1>Comandos en Minecraft</h1>
+            
+            <div class="info-box">
+                <h4>📌 Sintaxis Básica</h4>
+                <p>Los comandos en Minecraft siguen esta estructura general:</p>
+                <code style="display: block; margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 4px;">
+                    /[comando] [argumentos...]
+                </code>
+            </div>
+
+            <h2>Comandos Básicos</h2>
+            
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>/gamemode</code></td>
+                        <td>Cambia el modo de juego</td>
+                        <td><code>/gamemode creative @p</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/tp</code></td>
+                        <td>Teletransporta jugadores</td>
+                        <td><code>/tp Jugador1 100 64 100</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/give</code></td>
+                        <td>Da items a un jugador</td>
+                        <td><code>/give @p diamond 64</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/time</code></td>
+                        <td>Cambia la hora del mundo</td>
+                        <td><code>/time set day</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>/weather</code></td>
+                        <td>Cambia el clima</td>
+                        <td><code>/weather clear 6000</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Selectores de Jugadores</h2>
+            
+            <table class="command-table">
+                <thead>
+                    <tr>
+                        <th>Selector</th>
+                        <th>Descripción</th>
+                        <th>Ejemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>@p</code></td>
+                        <td>Jugador más cercano</td>
+                        <td><code>/give @p diamond</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>@r</code></td>
+                        <td>Jugador aleatorio</td>
+                        <td><code>/tp @r 0 64 0</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>@a</code></td>
+                        <td>Todos los jugadores</td>
+                        <td><code>/say @a Mensaje para todos</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>@e</code></td>
+                        <td>Todas las entidades</td>
+                        <td><code>/kill @e[type=minecraft:zombie]</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>@s</code></td>
+                        <td>El ejecutor del comando</td>
+                        <td><code>/execute as @a run say @s</code></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2>Comandos Avanzados</h2>
+            
+            <h3>Comando /execute</h3>
+            <div class="code-block">
+                <pre>
+# Ejecutar comando como otro jugador
+/execute as @a run say Hola desde execute
+
+# Ejecutar en posición específica
+/execute positioned 100 64 100 run setblock ~ ~ ~ minecraft:diamond_block
+
+# Ejecutar condicionalmente
+/execute if entity @p[distance=..10] run say Hay jugadores cerca
+
+# Encadenar ejecuciones
+/execute as @a at @s if block ~ ~-1 ~ minecraft:grass_block run give @s diamond 1</pre>
+            </div>
+
+            <h3>Comando /data</h3>
+            <div class="code-block">
+                <pre>
+# Obtener datos de una entidad
+/data get entity @p
+
+# Modificar datos de un bloque
+/data merge block 100 64 100 {CustomName:'{"text":"Bloque Especial"}'}
+
+# Copiar datos entre entidades
+/data modify entity @e[type=minecraft:zombie,limit=1] CustomName set from entity @p CustomName</pre>
+            </div>
+
+            <h2>Crear Comandos Personalizados con Functions</h2>
+            
+            <div class="step-box" style="background: rgba(0,0,0,0.2); padding: 20px; border-radius: 8px; margin: 20px 0;">
+                <h3>Ejemplo: Sistema de Inicio de Sesión</h3>
+                <p>Crea un archivo <code>login.mcfunction</code>:</p>
+                <div class="code-block">
+                    <pre>
+# login.mcfunction
+# Sistema de bienvenida
+
+# Mensajes
+tellraw @s {"text":"=== BIENVENIDO AL SERVIDOR ===","color":"gold","bold":true}
+tellraw @s {"text":"Tienes 5 minutos para registrarte","color":"yellow"}
+
+# Dar items iniciales
+give @s minecraft:bread 16
+give @s minecraft:wooden_pickaxe 1
+give @s minecraft:wooden_sword 1
+
+# Efectos de bienvenida
+effect @s minecraft:speed 30 0
+effect @s minecraft:haste 30 0
+
+# Teletransportar al spawn
+spreadplayers 0 0 100 200 false @s
+
+# Guardar punto de spawn
+spawnpoint @s</pre>
+                </div>
+            </div>
+
+            <h2>Sistema de Recompensas Diarias</h2>
+            
+            <div class="code-block">
+                <pre>
+# daily_reward.mcfunction
+# Sistema de recompensas diarias
+
+# Verificar si ya reclamó hoy
+scoreboard players add @s daily_cooldown 0
+execute if score @s daily_cooldown matches 1.. run tellraw @s {"text":"Ya reclamaste tu recompensa hoy","color":"red"}
+
+# Si no ha reclamado
+execute unless score @s daily_cooldown matches 1.. run tellraw @s {"text":"¡Recompensa diaria reclamada!","color":"green"}
+execute unless score @s daily_cooldown matches 1.. run give @s minecraft:diamond 5
+execute unless score @s daily_cooldown matches 1.. run give @s minecraft:emerald 10
+execute unless score @s daily_cooldown matches 1.. run experience add @s 100
+execute unless score @s daily_cooldown matches 1.. run scoreboard players set @s daily_cooldown 1
+
+# Programar reset diario (en otro archivo)
+# reset_daily.mcfunction
+scoreboard players set @a daily_cooldown 0
+tellraw @a {"text":"¡Las recompensas diarias se han reiniciado!","color":"green"}</pre>
+            </div>
+
+            <h2>Mini-juego: Parkour con Comandos</h2>
+            
+            <div class="code-block">
+                <pre>
+# parkour_start.mcfunction
+# Iniciar parkour
+
+# Configurar jugador
+gamemode adventure @s
+tp @s -100 65 -100
+
+# Guardar checkpoint inicial
+scoreboard players set @s checkpoint 1
+data merge entity @s {Pos:[-100.0,65.0,-100.0]}
+
+# Mensajes
+tellraw @s {"text":"=== PARKOUR CHALLENGE ===","color":"gold"}
+tellraw @s {"text":"Llega al final para ganar recompensas","color":"yellow"}
+
+# parkour_checkpoint.mcfunction
+# Sistema de checkpoints
+
+# Checkpoint 1
+execute positioned -50 70 -50 run tellraw @s {"text":"Checkpoint 1 alcanzado","color":"green"}
+execute positioned -50 70 -50 run scoreboard players set @s checkpoint 2
+
+# Checkpoint 2
+execute positioned 0 80 0 run tellraw @s {"text":"Checkpoint 2 alcanzado","color":"green"}
+execute positioned 0 80 0 run scoreboard players set @s checkpoint 3
+
+# Final
+execute positioned 100 90 100 run tellraw @s {"text":"¡COMPLETASTE EL PARKOUR!","color":"gold","bold":true}
+execute positioned 100 90 100 run give @s minecraft:diamond 10
+execute positioned 100 90 100 run effect @s minecraft:levitation 5 0
+
+# parkour_reset.mcfunction
+# Resetear si cae al vacío
+
+execute if entity @s[y=-10] run tp @s -100 65 -100
+execute if entity @s[y=-10] run tellraw @s {"text":"Has caído, reiniciando...","color":"red"}</pre>
+            </div>
+
+            <h2>Sistema de Títulos y Subtítulos</h2>
+            
+            <div class="code-block">
+                <pre>
+# titles.mcfunction
+# Sistema de títulos
+
+# Título principal
+title @s title {"text":"MINECRAFT DEV","color":"gold","bold":true}
+
+# Subtítulo
+title @s subtitle {"text":"Guía de comandos","color":"yellow"}
+
+# Título con acción
+title @s actionbar {"text":"¡Bienvenido al servidor!","color":"green"}
+
+# Títulos en secuencia
+schedule function titles:wave1 1s
+schedule function titles:wave2 3s
+schedule function titles:wave3 5s
+
+# wave1.mcfunction
+title @a title {"text":"OLA 1","color":"red"}
+title @a subtitle {"text":"¡Prepárate!","color":"yellow"}
+playsound minecraft:entity.ender_dragon.growl master @a
+
+# wave2.mcfunction
+title @a title {"text":"OLA 2","color":"red"}
+title @a subtitle {"text":"¡Más difícil!","color":"yellow"}
+summon minecraft:zombie ~ ~ ~
+summon minecraft:skeleton ~ ~ ~
+
+# wave3.mcfunction
+title @a title {"text":"OLA FINAL","color":"red","bold":true}
+title @a subtitle {"text":"¡BOSS!","color":"yellow"}
+summon minecraft:evoker ~ ~ ~</pre>
+            </div>
+
+            <h2>Sistema de Partículas y Efectos</h2>
+            
+            <div class="code-block">
+                <pre>
+# particles.mcfunction
+# Sistema de partículas
+
+# Partículas alrededor del jugador
+execute at @a run particle minecraft:portal ~ ~1 ~ 0.5 1 0.5 0.1 50
+
+# Partículas en área específica
+particle minecraft:dust 1 0 0 1 100 200 64 100 10 20 20 0.1 50
+
+# Efectos visuales para eventos
+execute at @e[type=minecraft:zombie] run particle minecraft:angry_villager ~ ~1 ~ 0.5 0.5 0.5 0 5
+
+# Luz de beam para tesoros
+execute positioned ~ ~-1 ~ run particle minecraft:end_rod ~ ~1 ~ 0 0 0 0.1 100
+execute positioned ~ ~-1 ~ run particle minecraft:fireworks_spark ~ ~2 ~ 0 0 0 0.1 50</pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h4>📚 Consejos Profesionales</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Usa <code>scoreboard</code> para variables persistentes</li>
+                    <li>Combina <code>execute</code> con condiciones para lógica compleja</li>
+                    <li>Programa funciones con <code>schedule</code> para temporizadores</li>
+                    <li>Usa <code>data merge</code> para modificar NBT de entidades</li>
+                    <li>Optimiza comandos usando <code>execute if</code> antes de acciones costosas</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Minecraft Dev Blog &copy; 2024 - Guías profesionales para desarrolladores</p>
+        </div>
+    </footer>
+</body>
+</html>

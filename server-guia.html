@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Servidores - Minecraft Dev Blog</title>
+    <style>
+        /* Mismo CSS que codigo-js.html */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --dark-bg: #1a2634;
+            --card-bg: #2a3747;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --border-color: #40546b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1a24 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 40px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            background: rgba(26, 38, 52, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-menu {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .nav-item {
+            padding: 15px 0;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            transform: scaleX(1);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .content-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin: 30px 0 20px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--text-primary);
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #1e2a36;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .code-block pre {
+            color: #e0e0e0;
+        }
+
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .step-box {
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .footer {
+            background: var(--primary-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Guía de Servidores Minecraft</h1>
+            <p>Configuración profesional y optimización</p>
+        </div>
+    </header>
+
+    <div class="nav-container">
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">Inicio</a>
+            <a href="codigo-js.html" class="nav-item">Código JS</a>
+            <a href="server-guia.html" class="nav-item active">Servidores</a>
+            <a href="comandos-guia.html" class="nav-item">Comandos</a>
+            <a href="crear-mcfunction.html" class="nav-item">McFunctions</a>
+        </nav>
+    </div>
+
+    <main class="main-container">
+        <div class="content-section">
+            <h1>Configuración Profesional de Servidores</h1>
+            
+            <div class="info-box">
+                <h4>📋 Tipos de Servidores</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>Vanilla:</strong> Experiencia original sin modificaciones</li>
+                    <li><strong>Spigot/Paper:</strong> Servidores con plugins (Java Edition)</li>
+                    <li><strong>Bedrock Dedicated Server:</strong> Servidor oficial para Bedrock</li>
+                    <li><strong>PocketMine-MP:</strong> Servidor para Minecraft PE/Bedrock con plugins</li>
+                </ul>
+            </div>
+
+            <h2>Configuración de Servidor Bedrock</h2>
+            
+            <div class="step-box">
+                <h3>Paso 1: Descargar el servidor</h3>
+                <p>Descarga la última versión de Minecraft Bedrock Dedicated Server desde la página oficial de Minecraft.</p>
+                <div class="code-block">
+                    <pre>
+# Estructura de archivos del servidor
+bedrock_server/
+├── bedrock_server.exe
+├── bedrock_server
+├── server.properties
+├── permissions.json
+├── whitelist.json
+└── worlds/
+    └── Bedrock level/</pre>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h3>Paso 2: Configurar server.properties</h3>
+                <div class="code-block">
+                    <pre>
+# Configuración básica del servidor
+server-port=19132
+server-name=Minecraft Dev Server
+max-players=20
+gamemode=survival
+difficulty=normal
+allow-cheats=true
+online-mode=true
+white-list=false
+
+# Configuración de mundo
+level-name=Bedrock level
+level-seed=
+level-type=DEFAULT
+
+# Configuración de red
+max-threads=8
+compression-threshold=1
+compression-level=6
+
+# Configuración de rendimiento
+view-distance=10
+tick-distance=4
+player-idle-timeout=30</pre>
+                </div>
+            </div>
+
+            <h2>Optimización de Rendimiento</h2>
+            
+            <div class="code-block">
+                <pre>
+# Parámetros de inicio optimizados (para Linux)
+./bedrock_server \
+  --max-players 50 \
+  --port 19132 \
+  --server-name "Optimized Server" \
+  --view-distance 12 \
+  --tick-distance 6
+
+# Script de inicio avanzado (start.sh)
+#!/bin/bash
+export LD_LIBRARY_PATH=.
+export UE4_LOGGER_SUPPRESS=1
+./bedrock_server \
+  --max-players $(( $(nproc) * 10 )) \
+  --port 19132 \
+  --view-distance $(( $(nproc) * 2 )) \
+  --tick-distance 4</pre>
+            </div>
+
+            <h2>Sistema de Permisos</h2>
+            
+            <div class="step-box">
+                <h3>Configurar permissions.json</h3>
+                <div class="code-block">
+                    <pre>
+{
+    "allowed": [
+        {
+            "permission": "operator",
+            "xuid": "2533274792345678"
+        }
+    ],
+    "permissions": [
+        {
+            "permission": "member",
+            "xuid": "2533274792345679"
+        }
+    ]
+}</pre>
+                </div>
+            </div>
+
+            <div class="step-box">
+                <h3>Whitelist (Lista blanca)</h3>
+                <div class="code-block">
+                    <pre>
+# whitelist.json
+[
+    {
+        "name": "Jugador1",
+        "xuid": "2533274792345678"
+    },
+    {
+        "name": "Jugador2", 
+        "xuid": "2533274792345679"
+    }
+]
+
+# Comandos de whitelist en consola
+whitelist add Jugador1
+whitelist remove Jugador2
+whitelist list
+whitelist on
+whitelist off</pre>
+                </div>
+            </div>
+
+            <h2>Plugins para Servidores Bedrock</h2>
+            
+            <div class="info-box">
+                <h4>Plugins populares para PocketMine-MP</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><strong>PurePerms:</strong> Sistema avanzado de permisos</li>
+                    <li><strong>EconomyAPI:</strong> Sistema económico</li>
+                    <li><strong>EssentialsPM:</strong> Comandos esenciales</li>
+                    <li><strong>FactionsPro:</strong> Sistema de facciones</li>
+                    <li><strong>SkyWars:</strong> Minijuego SkyWars</li>
+                </ul>
+            </div>
+
+            <h2>Respaldo Automático</h2>
+            
+            <div class="code-block">
+                <pre>
+#!/bin/bash
+# Script de backup para servidor
+
+BACKUP_DIR="/backups/minecraft"
+WORLD_DIR="/server/worlds"
+DATE=$(date +%Y%m%d_%H%M%S)
+
+# Crear directorio de backup
+mkdir -p $BACKUP_DIR
+
+# Detener servidor (opcional)
+# screen -S minecraft -X stuff "say Servidor en mantenimiento por backup...^M"
+# sleep 5
+# screen -S minecraft -X stuff "stop^M"
+# sleep 10
+
+# Comprimir mundo
+tar -czf "$BACKUP_DIR/world_$DATE.tar.gz" $WORLD_DIR
+
+# Iniciar servidor
+# screen -S minecraft -X stuff "./start.sh^M"
+
+# Mantener solo últimos 7 backups
+find $BACKUP_DIR -name "world_*.tar.gz" -mtime +7 -delete
+
+echo "Backup completado: world_$DATE.tar.gz"</pre>
+            </div>
+
+            <h2>Monitoreo del Servidor</h2>
+            
+            <div class="code-block">
+                <pre>
+#!/bin/bash
+# Script de monitoreo
+
+SERVER_PORT=19132
+LOG_FILE="/server/logs/monitor.log"
+
+while true; do
+    # Verificar si el servidor está respondiendo
+    if nc -z localhost $SERVER_PORT; then
+        # Obtener estadísticas
+        PLAYERS=$(screen -S minecraft -X stuff "list^M" | tail -n 1)
+        MEMORY=$(free -m | grep Mem | awk '{print $3/$2 * 100}')
+        CPU=$(top -bn1 | grep "Cpu(s)" | awk '{print $2}')
+        
+        # Registrar
+        echo "$(date): Jugadores: $PLAYERS, Memoria: $MEMORY%, CPU: $CPU%" >> $LOG_FILE
+        
+        # Alertas
+        if (( $(echo "$MEMORY > 90" | bc -l) )); then
+            echo "ALERTA: Memoria alta ($MEMORY%)" >> $LOG_FILE
+        fi
+    else
+        echo "$(date): ERROR - Servidor no responde" >> $LOG_FILE
+        # Reiniciar servidor si es necesario
+        # ./start.sh
+    fi
+    
+    sleep 60
+done</pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h4>🔧 Comandos Útiles de Consola</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><code>list</code> - Muestra jugadores conectados</li>
+                    <li><code>say [mensaje]</code> - Envía mensaje a todos</li>
+                    <li><code>kick [jugador] [razón]</code> - Expulsa jugador</li>
+                    <li><code>ban [jugador]</code> - Banea jugador</li>
+                    <li><code>reload</code> - Recarga configuración</li>
+                    <li><code>save-all</code> - Guarda el mundo</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Minecraft Dev Blog &copy; 2024 - Guías profesionales para desarrolladores</p>
+        </div>
+    </footer>
+</body>
+</html>

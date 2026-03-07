@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía JavaScript para Addons - Minecraft Dev Blog</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Mismo CSS del index.html */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e67e22;
+            --success-color: #27ae60;
+            --danger-color: #c0392b;
+            --dark-bg: #1a2634;
+            --card-bg: #2a3747;
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --border-color: #40546b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1a24 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            padding: 40px 0;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            background: rgba(26, 38, 52, 0.95);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-menu {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .nav-item {
+            padding: 15px 0;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-color);
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-item:hover::after,
+        .nav-item.active::after {
+            transform: scaleX(1);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .content-section {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--secondary-color);
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: var(--accent-color);
+            margin: 30px 0 20px;
+            font-size: 1.8rem;
+        }
+
+        h3 {
+            color: var(--text-primary);
+            margin: 20px 0 10px;
+            font-size: 1.3rem;
+        }
+
+        .code-block {
+            background: #1e2a36;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .code-block pre {
+            color: #e0e0e0;
+        }
+
+        .info-box {
+            background: rgba(52, 152, 219, 0.1);
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .info-box h4 {
+            color: var(--secondary-color);
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            background: var(--primary-color);
+            padding: 30px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>Guía JavaScript para Addons</h1>
+            <p>Domina la creación de scripts para Minecraft Bedrock</p>
+        </div>
+    </header>
+
+    <div class="nav-container">
+        <nav class="nav-menu">
+            <a href="index.html" class="nav-item">Inicio</a>
+            <a href="codigo-js.html" class="nav-item active">Código JS</a>
+            <a href="server-guia.html" class="nav-item">Servidores</a>
+            <a href="comandos-guia.html" class="nav-item">Comandos</a>
+            <a href="crear-mcfunction.html" class="nav-item">McFunctions</a>
+        </nav>
+    </div>
+
+    <main class="main-container">
+        <div class="content-section">
+            <h1>JavaScript para Minecraft Bedrock</h1>
+            
+            <div class="info-box">
+                <h4>📌 Requisitos previos</h4>
+                <p>Para desarrollar con JavaScript en Minecraft necesitas:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Minecraft Bedrock Edition (versión 1.20.30+)</li>
+                    <li>Conocimientos básicos de JavaScript</li>
+                    <li>Un editor de código (VS Code recomendado)</li>
+                    <li>Habilitar "GameTest Framework" en las configuraciones experimentales</li>
+                </ul>
+            </div>
+
+            <h2>Estructura Básica de un Script</h2>
+            <div class="code-block">
+                <pre>
+// Importar módulos necesarios
+import { world, system } from "@minecraft/server";
+import { ActionFormData } from "@minecraft/server-ui";
+
+// Evento cuando un jugador se une
+world.afterEvents.playerSpawn.subscribe((event) => {
+    const player = event.player;
+    
+    // Mensaje de bienvenida
+    player.sendMessage(`§a¡Bienvenido ${player.name} al servidor!`);
+    
+    // Dar item inicial
+    player.runCommand("give @s diamond 1");
+});</pre>
+            </div>
+
+            <h2>Crear una UI Interactiva</h2>
+            <div class="code-block">
+                <pre>
+async function showPlayerMenu(player) {
+    // Crear formulario
+    const menu = new ActionFormData()
+        .title("Menú del Servidor")
+        .body("Selecciona una opción:")
+        .button("Ver Perfil", "textures/ui/perfil")
+        .button("Tienda", "textures/ui/tienda") 
+        .button("Minijuegos", "textures/ui/juegos")
+        .button("Cerrar");
+
+    // Mostrar menú
+    const response = await menu.show(player);
+
+    // Manejar selección
+    switch(response.selection) {
+        case 0:
+            showProfile(player);
+            break;
+        case 1:
+            showShop(player);
+            break;
+        case 2:
+            showGames(player);
+            break;
+    }
+}
+
+// Función para mostrar perfil
+function showProfile(player) {
+    const profile = new ActionFormData()
+        .title("Perfil de " + player.name)
+        .body(`Rango: §6VIP§r\nPuntos: §a1000§r`)
+        .button("Cerrar");
+    
+    profile.show(player);
+}</pre>
+            </div>
+
+            <h2>Manejo de Eventos</h2>
+            <div class="code-block">
+                <pre>
+// Escuchar cuando un jugador rompe un bloque
+world.afterEvents.blockBreak.subscribe((event) => {
+    const player = event.player;
+    const block = event.block;
+    
+    player.sendMessage(`§7Rompiendo: ${block.typeId}`);
+    
+    // Dar experiencia según el bloque
+    if (block.typeId === "minecraft:diamond_ore") {
+        player.addExperience(10);
+        player.sendMessage("§a+10 XP");
+    }
+});
+
+// Sistema de cooldown para comandos
+const cooldowns = new Map();
+
+world.beforeEvents.itemUse.subscribe((event) => {
+    const player = event.source;
+    const item = event.itemStack;
+    
+    if (item?.typeId === "minecraft:stick") {
+        const lastUse = cooldowns.get(player.id) || 0;
+        const now = Date.now();
+        
+        if (now - lastUse < 5000) {
+            event.cancel = true;
+            player.sendMessage("§cEspera 5 segundos para usar esto");
+        } else {
+            cooldowns.set(player.id, now);
+            player.sendMessage("§a¡Has usado el item especial!");
+        }
+    }
+});</pre>
+            </div>
+
+            <h2>Comandos Personalizados</h2>
+            <div class="code-block">
+                <pre>
+import { world, system } from "@minecraft/server";
+
+// Registrar comando personalizado
+world.beforeEvents.chatSend.subscribe((event) => {
+    const message = event.message;
+    const player = event.sender;
+    
+    // Comando /fly
+    if (message.startsWith("!fly")) {
+        event.cancel = true;
+        
+        // Verificar permisos
+        if (hasPermission(player, "fly")) {
+            toggleFly(player);
+        } else {
+            player.sendMessage("§cNo tienes permiso para usar este comando");
+        }
+    }
+});
+
+function toggleFly(player) {
+    const ability = player.getComponent("minecraft:abilities");
+    
+    if (ability?.canFly) {
+        player.runCommand("ability @s mayfly false");
+        player.sendMessage("§cModo vuelo desactivado");
+    } else {
+        player.runCommand("ability @s mayfly true");
+        player.sendMessage("§aModo vuelo activado");
+    }
+}</pre>
+            </div>
+
+            <h2>Sistema de Puntos y Economía</h2>
+            <div class="code-block">
+                <pre>
+// Base de datos simple con propiedades dinámicas
+class EconomySystem {
+    constructor() {
+        this.balances = new Map();
+    }
+    
+    async getBalance(player) {
+        const property = player.getDynamicProperty("balance");
+        return property || 0;
+    }
+    
+    async addBalance(player, amount) {
+        const current = await this.getBalance(player);
+        const newBalance = current + amount;
+        
+        player.setDynamicProperty("balance", newBalance);
+        player.sendMessage(`§a+${amount} monedas. Total: ${newBalance}`);
+        
+        return newBalance;
+    }
+    
+    async removeBalance(player, amount) {
+        const current = await this.getBalance(player);
+        
+        if (current >= amount) {
+            const newBalance = current - amount;
+            player.setDynamicProperty("balance", newBalance);
+            player.sendMessage(`§c-${amount} monedas. Total: ${newBalance}`);
+            return true;
+        }
+        
+        player.sendMessage("§cSaldo insuficiente");
+        return false;
+    }
+}
+
+// Uso del sistema
+const economy = new EconomySystem();
+
+world.afterEvents.playerSpawn.subscribe(async (event) => {
+    const player = event.player;
+    const balance = await economy.getBalance(player);
+    
+    player.sendMessage(`Tu saldo: §a${balance} monedas`);
+});</pre>
+            </div>
+
+            <h2>Ejemplo: Sistema de Recompensas Diarias</h2>
+            <div class="code-block">
+                <pre>
+class DailyRewards {
+    constructor() {
+        this.rewards = [
+            { item: "minecraft:diamond", amount: 1, day: 1 },
+            { item: "minecraft:emerald", amount: 5, day: 2 },
+            { item: "minecraft:netherite_ingot", amount: 1, day: 3 },
+            { item: "minecraft:experience_bottle", amount: 10, day: 4 },
+            { item: "minecraft:elytra", amount: 1, day: 5 }
+        ];
+    }
+    
+    async claimDaily(player) {
+        const lastClaim = player.getDynamicProperty("last_claim");
+        const streak = player.getDynamicProperty("streak") || 0;
+        const now = Date.now();
+        
+        // Verificar si ya reclamó hoy (24 horas)
+        if (lastClaim && (now - lastClaim) < 86400000) {
+            const hoursLeft = Math.ceil((86400000 - (now - lastClaim)) / 3600000);
+            player.sendMessage(`§cPróxima recompensa en ${hoursLeft} horas`);
+            return;
+        }
+        
+        // Calcular día de la racha
+        let currentDay = streak + 1;
+        if (currentDay > this.rewards.length) {
+            currentDay = 1;
+        }
+        
+        // Dar recompensa
+        const reward = this.rewards[currentDay - 1];
+        player.runCommand(`give @s ${reward.item} ${reward.amount}`);
+        
+        // Actualizar datos
+        player.setDynamicProperty("last_claim", now);
+        player.setDynamicProperty("streak", currentDay);
+        
+        player.sendMessage(`§a¡Recompensa del día ${currentDay} reclamada!`);
+        player.sendMessage(`§7Has recibido: ${reward.amount}x ${reward.item}`);
+    }
+}
+
+// Uso
+const daily = new DailyRewards();
+
+// Comando !daily
+world.beforeEvents.chatSend.subscribe((event) => {
+    if (event.message === "!daily") {
+        event.cancel = true;
+        daily.claimDaily(event.sender);
+    }
+});</pre>
+            </div>
+
+            <div class="info-box" style="margin-top: 30px;">
+                <h4>📚 Recursos adicionales</h4>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li><a href="#" style="color: var(--secondary-color);">Documentación oficial de Minecraft</a></li>
+                    <li><a href="#" style="color: var(--secondary-color);">API Reference</a></li>
+                    <li><a href="#" style="color: var(--secondary-color);">Ejemplos avanzados</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>Minecraft Dev Blog &copy; 2024 - Guías profesionales para desarrolladores</p>
+        </div>
+    </footer>
+</body>
+</html>

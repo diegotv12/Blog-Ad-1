@@ -2,11 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="google-adsense-account" content="ca-pub-3112291855870017">
     <title>Minecraft Dev Blog - Guías y Tutoriales</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.ibb.co/JNmvJKf/TVCRAFT-MC-FOR-MINE.png">
     <!-- Supabase JavaScript Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3112291855870017" crossorigin="anonymous"></script>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -19,6 +23,7 @@
             --text-primary: #ecf0f1;
             --text-secondary: #bdc3c7;
             --border-color: #40546b;
+            --ad-bg: #34495e;
         }
 
         * {
@@ -32,6 +37,9 @@
             background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1a24 100%);
             color: var(--text-primary);
             line-height: 1.6;
+            /* Prevenir zoom en móviles */
+            touch-action: pan-y pinch-zoom;
+            -webkit-text-size-adjust: 100%;
         }
 
         /* Header profesional */
@@ -62,14 +70,14 @@
         }
 
         .header h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 300;
             margin-bottom: 10px;
             letter-spacing: 2px;
         }
 
         .header p {
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.2rem);
             opacity: 0.9;
             max-width: 600px;
         }
@@ -90,7 +98,8 @@
             padding: 0 20px;
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: clamp(15px, 3vw, 40px);
+            flex-wrap: wrap;
         }
 
         .nav-item {
@@ -100,6 +109,7 @@
             font-weight: 500;
             position: relative;
             transition: color 0.3s;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .nav-item::after {
@@ -133,7 +143,7 @@
         .content-section {
             background: var(--card-bg);
             border-radius: 12px;
-            padding: 30px;
+            padding: clamp(20px, 4vw, 30px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
         }
@@ -144,30 +154,101 @@
             gap: 30px;
         }
 
-        /* Widget de usuario */
+        /* Widget de usuario - AHORA EN TODAS LAS PÁGINAS */
         .user-widget {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             border-radius: 12px;
-            padding: 25px;
+            padding: clamp(20px, 4vw, 25px);
             color: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
         }
 
         .user-widget h3 {
-            font-size: 1.3rem;
+            font-size: clamp(1.2rem, 3vw, 1.3rem);
             margin-bottom: 15px;
             font-weight: 400;
             opacity: 0.9;
+        }
+
+        .user-widget .user-info-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-tcoins {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .tcoin-icon {
+            font-size: 1.2rem;
+        }
+
+        .timer-info {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .timer-progress {
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 1s linear;
         }
 
         .input-group {
             display: flex;
             gap: 10px;
             margin: 20px 0;
+            flex-wrap: wrap;
         }
 
         .input-group input {
             flex: 1;
+            min-width: 200px;
             padding: 12px 15px;
             border: none;
             border-radius: 8px;
@@ -194,6 +275,7 @@
             transition: all 0.3s;
             background: white;
             color: var(--primary-color);
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .btn:hover {
@@ -206,6 +288,39 @@
             color: white;
         }
 
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Anuncios */
+        .ad-container {
+            background: var(--ad-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .ad-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .ad-responsive {
+            width: 100%;
+            min-height: 90px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         /* Notificaciones */
         .notification {
             background: rgba(255,255,255,0.1);
@@ -214,6 +329,10 @@
             border-radius: 8px;
             margin: 15px 0;
             animation: slideIn 0.3s ease;
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-color);
         }
 
         @keyframes slideIn {
@@ -329,7 +448,13 @@
             color: var(--text-secondary);
         }
 
-        /* Responsive */
+        /* Responsive mejorado */
+        @media (max-width: 1024px) {
+            .main-container {
+                gap: 30px;
+            }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.5rem;
@@ -346,6 +471,32 @@
             
             .input-group {
                 flex-direction: column;
+            }
+
+            .input-group input,
+            .input-group .btn {
+                width: 100%;
+            }
+
+            .user-info-display {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .ranking-item {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .user-info {
+                margin-left: 0;
             }
         }
     </style>
@@ -366,6 +517,46 @@
             <a href="comandos-guia.html" class="nav-item">Comandos</a>
             <a href="crear-mcfunction.html" class="nav-item">McFunctions</a>
         </nav>
+    </div>
+
+    <!-- Widget de usuario GLOBAL (visible en todas las páginas) -->
+    <div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+        <div class="user-widget" id="globalUserWidget">
+            <h3>👋 Bienvenido al Dev Blog</h3>
+            <p style="opacity: 0.9; font-size: 0.95rem;">Ingresa tu usuario para ganar TCoins cada 5 minutos</p>
+            
+            <div id="userAuthSection">
+                <!-- Este contenido se actualizará dinámicamente con JavaScript -->
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Tu usuario de Minecraft">
+                    <button class="btn btn-primary" onclick="registrarUsuario()">Registrar</button>
+                </div>
+            </div>
+            
+            <div id="userInfoSection" style="display: none;">
+                <!-- Información del usuario logueado -->
+            </div>
+
+            <div id="notification-area"></div>
+        </div>
+    </div>
+
+    <!-- Anuncio superior -->
+    <div style="max-width: 1200px; margin: 0 auto 20px; padding: 0 20px;">
+        <div class="ad-container">
+            <div class="ad-label">Publicidad</div>
+            <div class="ad-responsive">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3112291855870017"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
     </div>
 
     <main class="main-container">
@@ -419,21 +610,25 @@ async function showSimpleUI(player) {
     }
 }</pre>
             </div>
+
+            <!-- Anuncio dentro del contenido -->
+            <div class="ad-container" style="margin-top: 30px;">
+                <div class="ad-label">Publicidad</div>
+                <div class="ad-responsive">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3112291855870017"
+                         data-ad-slot="0987654321"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
         </div>
 
         <aside class="sidebar">
-            <div class="user-widget">
-                <h3>Bienvenido al Dev Blog</h3>
-                <p style="opacity: 0.9; font-size: 0.95rem;">Ingresa tu usuario para recibir notificaciones</p>
-                
-                <div class="input-group">
-                    <input type="text" id="username" placeholder="Tu usuario de Minecraft">
-                    <button class="btn btn-primary" onclick="registrarUsuario()">Registrar</button>
-                </div>
-                
-                <div id="notification-area"></div>
-            </div>
-
             <div class="content-section">
                 <h3 style="color: var(--secondary-color); margin-bottom: 20px;">Desarrolladores Destacados</h3>
                 <div class="ranking-list" id="ranking">
@@ -458,6 +653,22 @@ async function showSimpleUI(player) {
                     </div>
                 </div>
             </div>
+
+            <!-- Anuncio lateral -->
+            <div class="ad-container">
+                <div class="ad-label">Publicidad</div>
+                <div class="ad-responsive">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3112291855870017"
+                         data-ad-slot="5678901234"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
+            </div>
         </aside>
     </main>
 
@@ -471,10 +682,151 @@ async function showSimpleUI(player) {
     <script>
         // Configuración de Supabase
         const SUPABASE_URL = 'https://jsbsripecqjzxqfjvfay.supabase.co';
-        const SUPABASE_KEY = 'sb_publishable_bnGlvplxFkZK_VtBOPaYfg_TMRv_Qnq';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzYnNyaXBlY3FqenhxZmp2ZmF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NTkxMDAsImV4cCI6MjA4ODQzNTEwMH0.VZs3shjv0Y3gwlbbcrTh5JOB_pe64V4K_R9nofX-CY8';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const RECOMPENSA_PUNTOS = 18;
+        const TIEMPO_RECOMPENSA = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+        let temporizadorActivo = null;
+        let usuarioActual = null;
+        let tiempoRestante = TIEMPO_RECOMPENSA;
+
+        // Cargar usuario al iniciar
+        document.addEventListener('DOMContentLoaded', async () => {
+            actualizarRanking();
+            await cargarUsuarioGuardado();
+            iniciarTemporizadorRecompensa();
+        });
+
+        async function cargarUsuarioGuardado() {
+            const usuarioGuardado = localStorage.getItem('mc_username');
+            if (usuarioGuardado) {
+                try {
+                    const { data: usuario, error } = await supabase
+                        .from('usuarios')
+                        .select('*')
+                        .eq('usuario', usuarioGuardado)
+                        .single();
+
+                    if (usuario) {
+                        usuarioActual = usuario;
+                        mostrarInfoUsuario(usuario);
+                        document.getElementById('userAuthSection').style.display = 'none';
+                        
+                        // Verificar si puede obtener recompensa
+                        await verificarRecompensaPendiente(usuario);
+                    }
+                } catch (error) {
+                    console.error('Error al cargar usuario:', error);
+                }
+            }
+        }
+
+        async function verificarRecompensaPendiente(usuario) {
+            if (!usuario) return;
+
+            const ultimaRecompensa = usuario.ultima_recompensa ? new Date(usuario.ultima_recompensa) : null;
+            const ahora = new Date();
+            
+            if (ultimaRecompensa) {
+                const tiempoPasado = ahora - ultimaRecompensa;
+                if (tiempoPasado < TIEMPO_RECOMPENSA) {
+                    tiempoRestante = TIEMPO_RECOMPENSA - tiempoPasado;
+                    iniciarTemporizadorRecompensa();
+                } else {
+                    // Puede obtener recompensa inmediata
+                    await otorgarRecompensa(usuario);
+                }
+            } else {
+                // Primera vez - otorgar recompensa
+                await otorgarRecompensa(usuario);
+            }
+        }
+
+        function mostrarInfoUsuario(usuario) {
+            const userInfoSection = document.getElementById('userInfoSection');
+            userInfoSection.style.display = 'block';
+            
+            userInfoSection.innerHTML = `
+                <div class="user-info-display">
+                    <div class="user-avatar">
+                        ${usuario.usuario.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name-display">${usuario.usuario}</div>
+                        <div class="user-tcoins">
+                            <span class="tcoin-icon">🪙</span>
+                            <span>${usuario.creditos || 0} TCoins</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="cerrarSesion()">✕</button>
+                </div>
+                <div class="timer-info" id="timerInfo">
+                    <span>Próxima recompensa en:</span>
+                    <div class="timer-progress">
+                        <div class="timer-bar" id="timerBar" style="width: 0%"></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 5px;" id="timerDisplay"></div>
+                </div>
+            `;
+        }
+
+        function iniciarTemporizadorRecompensa() {
+            if (temporizadorActivo) {
+                clearInterval(temporizadorActivo);
+            }
+
+            temporizadorActivo = setInterval(async () => {
+                if (!usuarioActual) return;
+
+                tiempoRestante -= 1000;
+                
+                // Actualizar barra de progreso
+                const progreso = ((TIEMPO_RECOMPENSA - tiempoRestante) / TIEMPO_RECOMPENSA) * 100;
+                const timerBar = document.getElementById('timerBar');
+                const timerDisplay = document.getElementById('timerDisplay');
+                
+                if (timerBar && timerDisplay) {
+                    timerBar.style.width = `${progreso}%`;
+                    
+                    const minutos = Math.floor(tiempoRestante / 60000);
+                    const segundos = Math.floor((tiempoRestante % 60000) / 1000);
+                    timerDisplay.textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
+                }
+
+                if (tiempoRestante <= 0) {
+                    await otorgarRecompensa(usuarioActual);
+                    tiempoRestante = TIEMPO_RECOMPENSA;
+                }
+            }, 1000);
+        }
+
+        async function otorgarRecompensa(usuario) {
+            try {
+                const nuevosCreditos = (usuario.creditos || 0) + RECOMPENSA_PUNTOS;
+                
+                const { error: updateError } = await supabase
+                    .from('usuarios')
+                    .update({ 
+                        creditos: nuevosCreditos,
+                        ultima_recompensa: new Date().toISOString()
+                    })
+                    .eq('id', usuario.id);
+
+                if (!updateError) {
+                    usuario.creditos = nuevosCreditos;
+                    usuario.ultima_recompensa = new Date().toISOString();
+                    mostrarInfoUsuario(usuario);
+                    mostrarNotificacion(`¡Has ganado ${RECOMPENSA_PUNTOS} TCoins!`, 'success');
+                    
+                    // Actualizar ranking
+                    actualizarRanking();
+                }
+            } catch (error) {
+                console.error('Error al otorgar recompensa:', error);
+            }
+        }
 
         // Registrar o verificar usuario
         async function registrarUsuario() {
@@ -488,53 +840,75 @@ async function showSimpleUI(player) {
 
             try {
                 // Buscar usuario existente
-                const { data: usuarioExistente } = await supabase
+                const { data: usuarioExistente, error: searchError } = await supabase
                     .from('usuarios')
                     .select('*')
                     .eq('usuario', username)
-                    .single();
+                    .maybeSingle();
 
                 if (usuarioExistente) {
-                    // Usuario existe - dar recompensa
-                    const nuevosPuntos = (usuarioExistente.puntos || 0) + RECOMPENSA_PUNTOS;
+                    // Usuario existe
+                    usuarioActual = usuarioExistente;
+                    localStorage.setItem('mc_username', username);
                     
-                    const { error: updateError } = await supabase
-                        .from('usuarios')
-                        .update({ 
-                            puntos: nuevosPuntos,
-                            ultima_recompensa: new Date().toISOString()
-                        })
-                        .eq('id', usuarioExistente.id);
-
-                    if (!updateError) {
-                        mostrarNotificacion(`¡Has obtenido una recompensa de ${RECOMPENSA_PUNTOS} puntos!`, 'success');
-                        actualizarRanking();
-                    }
+                    document.getElementById('userAuthSection').style.display = 'none';
+                    mostrarInfoUsuario(usuarioExistente);
+                    
+                    await verificarRecompensaPendiente(usuarioExistente);
+                    mostrarNotificacion(`¡Bienvenido de nuevo, ${username}!`, 'success');
                 } else {
-                    // Crear nuevo usuario
-                    const { error: insertError } = await supabase
+                    // Crear nuevo usuario con email temporal (puedes modificar esto según necesites)
+                    const emailTemp = `${username}@temp.com`;
+                    
+                    const { data: nuevoUsuario, error: insertError } = await supabase
                         .from('usuarios')
                         .insert([
                             { 
                                 usuario: username,
-                                puntos: RECOMPENSA_PUNTOS,
+                                correo: emailTemp,
+                                contraseña: 'temporal',
+                                creditos: RECOMPENSA_PUNTOS,
                                 ultima_recompensa: new Date().toISOString()
                             }
-                        ]);
+                        ])
+                        .select()
+                        .single();
 
-                    if (!insertError) {
-                        mostrarNotificacion(`¡Bienvenido! Has recibido ${RECOMPENSA_PUNTOS} puntos de regalo`, 'success');
+                    if (!insertError && nuevoUsuario) {
+                        usuarioActual = nuevoUsuario;
+                        localStorage.setItem('mc_username', username);
+                        
+                        document.getElementById('userAuthSection').style.display = 'none';
+                        mostrarInfoUsuario(nuevoUsuario);
+                        
+                        tiempoRestante = TIEMPO_RECOMPENSA;
+                        iniciarTemporizadorRecompensa();
+                        
+                        mostrarNotificacion(`¡Bienvenido! Has recibido ${RECOMPENSA_PUNTOS} TCoins de regalo`, 'success');
                         actualizarRanking();
                     }
                 }
-
-                // Guardar en localStorage
-                localStorage.setItem('mc_username', username);
 
             } catch (error) {
                 console.error('Error:', error);
                 mostrarNotificacion('Error al procesar la solicitud', 'error');
             }
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('mc_username');
+            usuarioActual = null;
+            
+            if (temporizadorActivo) {
+                clearInterval(temporizadorActivo);
+                temporizadorActivo = null;
+            }
+            
+            document.getElementById('userAuthSection').style.display = 'block';
+            document.getElementById('userInfoSection').style.display = 'none';
+            document.getElementById('username').value = '';
+            
+            mostrarNotificacion('Sesión cerrada', 'success');
         }
 
         function mostrarNotificacion(mensaje, tipo) {
@@ -556,8 +930,8 @@ async function showSimpleUI(player) {
         async function actualizarRanking() {
             const { data: usuarios, error } = await supabase
                 .from('usuarios')
-                .select('usuario, puntos')
-                .order('puntos', { ascending: false })
+                .select('usuario, creditos')
+                .order('creditos', { ascending: false })
                 .limit(10);
 
             if (error) {
@@ -566,6 +940,13 @@ async function showSimpleUI(player) {
             }
 
             const rankingDiv = document.querySelector('#ranking');
+            if (!rankingDiv) return;
+
+            if (!usuarios || usuarios.length === 0) {
+                rankingDiv.innerHTML = '<div style="text-align: center; color: var(--text-secondary);">No hay usuarios aún</div>';
+                return;
+            }
+
             rankingDiv.innerHTML = '';
 
             usuarios.forEach((user, index) => {
@@ -576,25 +957,19 @@ async function showSimpleUI(player) {
                             <div class="user-info">
                                 <div class="user-name">${user.usuario}</div>
                             </div>
-                            <span class="user-points">${user.puntos || 0} pts</span>
+                            <span class="user-points">${user.creditos || 0} 🪙</span>
                         </div>
                     </div>
                 `;
             });
 
             // Actualizar total de usuarios
-            document.getElementById('total-users').textContent = usuarios.length;
-        }
-
-        // Cargar usuario guardado
-        document.addEventListener('DOMContentLoaded', () => {
-            actualizarRanking();
+            const { count } = await supabase
+                .from('usuarios')
+                .select('*', { count: 'exact', head: true });
             
-            const usuarioGuardado = localStorage.getItem('mc_username');
-            if (usuarioGuardado) {
-                document.getElementById('username').value = usuarioGuardado;
-            }
-        });
+            document.getElementById('total-users').textContent = count || 0;
+        }
     </script>
 </body>
 </html>

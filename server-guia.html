@@ -2,10 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="google-adsense-account" content="ca-pub-3112291855870017">
     <title>Guía de Servidores - Minecraft Dev Blog</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://i.ibb.co/JNmvJKf/TVCRAFT-MC-FOR-MINE.png">
+    <!-- Supabase JavaScript Client -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- AdSense Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3112291855870017" crossorigin="anonymous"></script>
     <style>
-        /* Mismo CSS que codigo-js.html */
         :root {
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
@@ -17,6 +23,7 @@
             --text-primary: #ecf0f1;
             --text-secondary: #bdc3c7;
             --border-color: #40546b;
+            --ad-bg: #34495e;
         }
 
         * {
@@ -30,17 +37,48 @@
             background: linear-gradient(135deg, var(--dark-bg) 0%, #0f1a24 100%);
             color: var(--text-primary);
             line-height: 1.6;
+            /* Prevenir zoom en móviles */
+            touch-action: pan-y pinch-zoom;
+            -webkit-text-size-adjust: 100%;
         }
 
         .header {
             background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-            padding: 40px 0;
+            padding: 60px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M20 20 L30 20 L30 30 L20 30 Z M40 40 L50 40 L50 50 L40 50 Z M60 60 L70 60 L70 70 L60 70 Z" fill="white"/></svg>');
+            background-size: 50px;
         }
 
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            opacity: 0.9;
+            max-width: 600px;
         }
 
         .nav-container {
@@ -58,7 +96,8 @@
             padding: 0 20px;
             display: flex;
             justify-content: center;
-            gap: 40px;
+            gap: clamp(15px, 3vw, 40px);
+            flex-wrap: wrap;
         }
 
         .nav-item {
@@ -67,6 +106,7 @@
             text-decoration: none;
             font-weight: 500;
             position: relative;
+            font-size: clamp(0.9rem, 2vw, 1rem);
         }
 
         .nav-item::after {
@@ -95,27 +135,222 @@
         .content-section {
             background: var(--card-bg);
             border-radius: 12px;
-            padding: 40px;
+            padding: clamp(20px, 4vw, 40px);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 1px solid var(--border-color);
+        }
+
+        /* Widget de usuario */
+        .user-widget {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 12px;
+            padding: clamp(20px, 4vw, 25px);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+
+        .user-widget h3 {
+            font-size: clamp(1.2rem, 3vw, 1.3rem);
+            margin-bottom: 15px;
+            font-weight: 400;
+            opacity: 0.9;
+        }
+
+        .user-widget .user-info-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(5px);
+            flex-wrap: wrap;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .user-name-display {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-tcoins {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .tcoin-icon {
+            font-size: 1.2rem;
+        }
+
+        .timer-info {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        .timer-progress {
+            height: 4px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 2px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 1s linear;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .input-group input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.7);
+        }
+
+        .input-group input:focus {
+            outline: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+            color: var(--primary-color);
+            font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .btn-primary {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Anuncios */
+        .ad-container {
+            background: var(--ad-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .ad-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .ad-responsive {
+            width: 100%;
+            min-height: 90px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Notificaciones */
+        .notification {
+            background: rgba(255,255,255,0.1);
+            border-left: 4px solid var(--success-color);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.error {
+            border-left-color: var(--danger-color);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
 
         h1 {
             color: var(--secondary-color);
             margin-bottom: 30px;
-            font-size: 2.5rem;
+            font-size: clamp(2rem, 4vw, 2.5rem);
         }
 
         h2 {
             color: var(--accent-color);
             margin: 30px 0 20px;
-            font-size: 1.8rem;
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
         }
 
         h3 {
             color: var(--text-primary);
             margin: 20px 0 10px;
-            font-size: 1.3rem;
+            font-size: clamp(1.2rem, 2.5vw, 1.3rem);
         }
 
         .code-block {
@@ -175,6 +410,22 @@
                 flex-wrap: wrap;
                 gap: 20px;
             }
+            
+            .user-info-display {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group input,
+            .input-group .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -196,6 +447,40 @@
         </nav>
     </div>
 
+    <!-- Widget de usuario GLOBAL -->
+    <div class="user-widget" id="globalUserWidget">
+        <h3>👋 Bienvenido al Dev Blog</h3>
+        <p style="opacity: 0.9; font-size: 0.95rem;">Ingresa tu usuario para ganar TCoins cada 5 minutos</p>
+        
+        <div id="userAuthSection">
+            <div class="input-group">
+                <input type="text" id="username" placeholder="Tu usuario de Minecraft">
+                <button class="btn btn-primary" onclick="registrarUsuario()">Registrar</button>
+            </div>
+        </div>
+        
+        <div id="userInfoSection" style="display: none;"></div>
+        <div id="notification-area"></div>
+    </div>
+
+    <!-- Anuncio superior -->
+    <div style="max-width: 1200px; margin: 0 auto 20px; padding: 0 20px;">
+        <div class="ad-container">
+            <div class="ad-label">Publicidad</div>
+            <div class="ad-responsive">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3112291855870017"
+                     data-ad-slot="1234567890"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
     <main class="main-container">
         <div class="content-section">
             <h1>Configuración Profesional de Servidores</h1>
@@ -208,6 +493,22 @@
                     <li><strong>Bedrock Dedicated Server:</strong> Servidor oficial para Bedrock</li>
                     <li><strong>PocketMine-MP:</strong> Servidor para Minecraft PE/Bedrock con plugins</li>
                 </ul>
+            </div>
+
+            <!-- Anuncio entre secciones -->
+            <div class="ad-container">
+                <div class="ad-label">Publicidad</div>
+                <div class="ad-responsive">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3112291855870017"
+                         data-ad-slot="2345678901"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
             </div>
 
             <h2>Configuración de Servidor Bedrock</h2>
@@ -281,6 +582,22 @@ export UE4_LOGGER_SUPPRESS=1
   --port 19132 \
   --view-distance $(( $(nproc) * 2 )) \
   --tick-distance 4</pre>
+            </div>
+
+            <!-- Anuncio en medio del contenido -->
+            <div class="ad-container">
+                <div class="ad-label">Publicidad</div>
+                <div class="ad-responsive">
+                    <ins class="adsbygoogle"
+                         style="display:block"
+                         data-ad-client="ca-pub-3112291855870017"
+                         data-ad-slot="3456789012"
+                         data-ad-format="auto"
+                         data-full-width-responsive="true"></ins>
+                    <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script>
+                </div>
             </div>
 
             <h2>Sistema de Permisos</h2>
@@ -425,10 +742,264 @@ done</pre>
         </div>
     </main>
 
+    <!-- Anuncio inferior -->
+    <div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+        <div class="ad-container">
+            <div class="ad-label">Publicidad</div>
+            <div class="ad-responsive">
+                <ins class="adsbygoogle"
+                     style="display:block"
+                     data-ad-client="ca-pub-3112291855870017"
+                     data-ad-slot="4567890123"
+                     data-ad-format="auto"
+                     data-full-width-responsive="true"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+
     <footer class="footer">
         <div class="footer-content">
             <p>Minecraft Dev Blog &copy; 2024 - Guías profesionales para desarrolladores</p>
         </div>
     </footer>
+
+    <script>
+        // Configuración de Supabase
+        const SUPABASE_URL = 'https://jsbsripecqjzxqfjvfay.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzYnNyaXBlY3FqenhxZmp2ZmF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI4NTkxMDAsImV4cCI6MjA4ODQzNTEwMH0.VZs3shjv0Y3gwlbbcrTh5JOB_pe64V4K_R9nofX-CY8';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        const RECOMPENSA_PUNTOS = 18;
+        const TIEMPO_RECOMPENSA = 5 * 60 * 1000; // 5 minutos en milisegundos
+
+        let temporizadorActivo = null;
+        let usuarioActual = null;
+        let tiempoRestante = TIEMPO_RECOMPENSA;
+
+        // Cargar usuario al iniciar
+        document.addEventListener('DOMContentLoaded', async () => {
+            await cargarUsuarioGuardado();
+            iniciarTemporizadorRecompensa();
+        });
+
+        async function cargarUsuarioGuardado() {
+            const usuarioGuardado = localStorage.getItem('mc_username');
+            if (usuarioGuardado) {
+                try {
+                    const { data: usuario, error } = await supabase
+                        .from('usuarios')
+                        .select('*')
+                        .eq('usuario', usuarioGuardado)
+                        .single();
+
+                    if (usuario) {
+                        usuarioActual = usuario;
+                        mostrarInfoUsuario(usuario);
+                        document.getElementById('userAuthSection').style.display = 'none';
+                        await verificarRecompensaPendiente(usuario);
+                    }
+                } catch (error) {
+                    console.error('Error al cargar usuario:', error);
+                }
+            }
+        }
+
+        async function verificarRecompensaPendiente(usuario) {
+            if (!usuario) return;
+
+            const ultimaRecompensa = usuario.ultima_recompensa ? new Date(usuario.ultima_recompensa) : null;
+            const ahora = new Date();
+            
+            if (ultimaRecompensa) {
+                const tiempoPasado = ahora - ultimaRecompensa;
+                if (tiempoPasado < TIEMPO_RECOMPENSA) {
+                    tiempoRestante = TIEMPO_RECOMPENSA - tiempoPasado;
+                    iniciarTemporizadorRecompensa();
+                } else {
+                    await otorgarRecompensa(usuario);
+                }
+            } else {
+                await otorgarRecompensa(usuario);
+            }
+        }
+
+        function mostrarInfoUsuario(usuario) {
+            const userInfoSection = document.getElementById('userInfoSection');
+            userInfoSection.style.display = 'block';
+            
+            userInfoSection.innerHTML = `
+                <div class="user-info-display">
+                    <div class="user-avatar">
+                        ${usuario.usuario.charAt(0).toUpperCase()}
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name-display">${usuario.usuario}</div>
+                        <div class="user-tcoins">
+                            <span class="tcoin-icon">🪙</span>
+                            <span>${usuario.creditos || 0} TCoins</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="cerrarSesion()">✕</button>
+                </div>
+                <div class="timer-info" id="timerInfo">
+                    <span>Próxima recompensa en:</span>
+                    <div class="timer-progress">
+                        <div class="timer-bar" id="timerBar" style="width: 0%"></div>
+                    </div>
+                    <div style="text-align: center; margin-top: 5px;" id="timerDisplay"></div>
+                </div>
+            `;
+        }
+
+        function iniciarTemporizadorRecompensa() {
+            if (temporizadorActivo) {
+                clearInterval(temporizadorActivo);
+            }
+
+            temporizadorActivo = setInterval(async () => {
+                if (!usuarioActual) return;
+
+                tiempoRestante -= 1000;
+                
+                const progreso = ((TIEMPO_RECOMPENSA - tiempoRestante) / TIEMPO_RECOMPENSA) * 100;
+                const timerBar = document.getElementById('timerBar');
+                const timerDisplay = document.getElementById('timerDisplay');
+                
+                if (timerBar && timerDisplay) {
+                    timerBar.style.width = `${progreso}%`;
+                    
+                    const minutos = Math.floor(tiempoRestante / 60000);
+                    const segundos = Math.floor((tiempoRestante % 60000) / 1000);
+                    timerDisplay.textContent = `${minutos}:${segundos.toString().padStart(2, '0')}`;
+                }
+
+                if (tiempoRestante <= 0) {
+                    await otorgarRecompensa(usuarioActual);
+                    tiempoRestante = TIEMPO_RECOMPENSA;
+                }
+            }, 1000);
+        }
+
+        async function otorgarRecompensa(usuario) {
+            try {
+                const nuevosCreditos = (usuario.creditos || 0) + RECOMPENSA_PUNTOS;
+                
+                const { error: updateError } = await supabase
+                    .from('usuarios')
+                    .update({ 
+                        creditos: nuevosCreditos,
+                        ultima_recompensa: new Date().toISOString()
+                    })
+                    .eq('id', usuario.id);
+
+                if (!updateError) {
+                    usuario.creditos = nuevosCreditos;
+                    usuario.ultima_recompensa = new Date().toISOString();
+                    mostrarInfoUsuario(usuario);
+                    mostrarNotificacion(`¡Has ganado ${RECOMPENSA_PUNTOS} TCoins!`, 'success');
+                }
+            } catch (error) {
+                console.error('Error al otorgar recompensa:', error);
+            }
+        }
+
+        async function registrarUsuario() {
+            const username = document.getElementById('username').value.trim();
+            const notificationArea = document.getElementById('notification-area');
+
+            if (!username) {
+                mostrarNotificacion('Por favor ingresa un nombre de usuario', 'error');
+                return;
+            }
+
+            try {
+                const { data: usuarioExistente, error: searchError } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('usuario', username)
+                    .maybeSingle();
+
+                if (usuarioExistente) {
+                    usuarioActual = usuarioExistente;
+                    localStorage.setItem('mc_username', username);
+                    
+                    document.getElementById('userAuthSection').style.display = 'none';
+                    mostrarInfoUsuario(usuarioExistente);
+                    
+                    await verificarRecompensaPendiente(usuarioExistente);
+                    mostrarNotificacion(`¡Bienvenido de nuevo, ${username}!`, 'success');
+                } else {
+                    const emailTemp = `${username}@temp.com`;
+                    
+                    const { data: nuevoUsuario, error: insertError } = await supabase
+                        .from('usuarios')
+                        .insert([
+                            { 
+                                usuario: username,
+                                correo: emailTemp,
+                                contraseña: 'temporal',
+                                creditos: RECOMPENSA_PUNTOS,
+                                ultima_recompensa: new Date().toISOString()
+                            }
+                        ])
+                        .select()
+                        .single();
+
+                    if (!insertError && nuevoUsuario) {
+                        usuarioActual = nuevoUsuario;
+                        localStorage.setItem('mc_username', username);
+                        
+                        document.getElementById('userAuthSection').style.display = 'none';
+                        mostrarInfoUsuario(nuevoUsuario);
+                        
+                        tiempoRestante = TIEMPO_RECOMPENSA;
+                        iniciarTemporizadorRecompensa();
+                        
+                        mostrarNotificacion(`¡Bienvenido! Has recibido ${RECOMPENSA_PUNTOS} TCoins de regalo`, 'success');
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('Error al procesar la solicitud', 'error');
+            }
+        }
+
+        function cerrarSesion() {
+            localStorage.removeItem('mc_username');
+            usuarioActual = null;
+            
+            if (temporizadorActivo) {
+                clearInterval(temporizadorActivo);
+                temporizadorActivo = null;
+            }
+            
+            document.getElementById('userAuthSection').style.display = 'block';
+            document.getElementById('userInfoSection').style.display = 'none';
+            document.getElementById('username').value = '';
+            
+            mostrarNotificacion('Sesión cerrada', 'success');
+        }
+
+        function mostrarNotificacion(mensaje, tipo) {
+            const area = document.getElementById('notification-area');
+            const className = tipo === 'success' ? 'notification' : 'notification error';
+            
+            area.innerHTML = `
+                <div class="${className}" style="${tipo === 'error' ? 'border-left-color: var(--danger-color);' : ''}">
+                    ${mensaje}
+                </div>
+            `;
+
+            setTimeout(() => {
+                area.innerHTML = '';
+            }, 5000);
+        }
+
+        // Inicializar anuncios de AdSense
+        window.adsbygoogle = window.adsbygoogle || [];
+    </script>
 </body>
 </html>
